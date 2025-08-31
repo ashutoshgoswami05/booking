@@ -30,6 +30,30 @@ jobs:
       - name: Run AWS CLI command
         run: aws s3 ls
 
+  build-docker-image:
+    runs-on: ubuntu-latest
+    environment: ${{inputs.env}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{vars.accountNo}}:role/Githubactions
+          aws-region: eu-central-1
+
+      - name: build docker image and push
+        working-directory: Java-Application/AirBnbClone-main
+        run: |
+          docker build . -t booking-app:latest 
+          docker tag booking-app:latest ${{vars.repository}}/booking-app:latest 
+          docker push ${{vars.repository}}/booking-app:latest
+        shell: bash
+
+
+
+
 #      - name: Terraform Init
 #        run: terraform init -reconfigure
 #
@@ -39,3 +63,4 @@ jobs:
 #      - name: Terraform Apply
 #        if: github.ref == 'refs/heads/main'
 #        run: terraform apply -auto-approve
+
