@@ -24,7 +24,7 @@ jobs:
 
       - name: setup infrastructure
         if: success()
-        uses: ./github/actions/terraform
+        uses: ./.github/actions/terraform
         with:
           working-directory: terraform
 
