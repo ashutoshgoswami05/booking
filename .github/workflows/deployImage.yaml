@@ -1,4 +1,4 @@
-name: Image build and push
+name: Image build and deploy
 
 on:
   workflow_dispatch:
@@ -39,16 +39,14 @@ jobs:
         shell: bash
 
 
+  deploy-application:
+    runs-on: ubuntu-latest
+#    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: deploy application
+        uses: .//github/actions/deployApplication
+        with:
+          eks-cluster-name: vars.EKS-CLUSTER-NAME
 
 
-
-#      - name: Terraform Init
-#        run: terraform init -reconfigure
-#
-#      - name: Terraform Plan
-#        run: terraform plan
-#
-#      - name: Terraform Apply
-#        if: github.ref == 'refs/heads/main'
-#        run: terraform apply -auto-approve
 
