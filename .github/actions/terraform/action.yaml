@@ -1,0 +1,47 @@
+name: terraform structure
+
+description: This creates the infrastructure in the AWS account
+
+inputs:
+  working-directory:
+    required: true
+    description: sets the working directory
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.6.0
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::471208935946:role/Githubactions
+        aws-region: eu-central-1
+
+    - name: Initialize terraform
+      if: success()
+      working-directory: ${{inputs.working-directory}}
+      run: |
+        terraform init
+      shell: bash
+
+    - name: terraform plan
+      working-directory: ${{inputs.working-directory}}
+      run: |
+        terraform plan
+      shell: bash
+
+    - name: terraform apply
+      working-directory: ${{inputs.working-directory}}
+      if: success()
+      run: |
+        terraform apply --auto-approve
+      shell: bash
+
+
