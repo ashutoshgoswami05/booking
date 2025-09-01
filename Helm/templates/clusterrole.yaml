@@ -1,0 +1,50 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aws-load-balancer-controller
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: aws-load-balancer-controller
+    meta.helm.sh/release-namespace: kube-system
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "services", "pods", "nodes", "endpoints"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["aws-load-balancer-controller-leader"]
+    verbs: ["create", "get", "update", "patch", "delete"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses/status"]
+    verbs: ["update"]
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aws-load-balancer-controller
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: aws-load-balancer-controller
+    meta.helm.sh/release-namespace: kube-system
+subjects:
+  - kind: ServiceAccount
+    name: aws-load-balancer-controller
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: aws-load-balancer-controller
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,46 @@
+name: Terraform Deploy
+
+on:
+  workflow_dispatch:
+
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::471208935946:role/Githubactions
+          aws-region: eu-central-1
+
+      - name: build docker image and push
+        working-directory: Java-Application/AirBnbClone-main
+        run: |
+            docker build . -t booking-app:latest --build-arg DB_USERNAME=$${{vars.DB_USERNAME}} --build-arg DB_PASSWORD=$${{vars.DB_PASSWORD}}
+            docker tag booking-app:latest ${{vars.repository}}/booking-app:latest
+            docker push ${{vars.repository}}/booking-app:latest
+        shell: bash
+
+
+
+
+
+#      - name: Terraform Init
+#        run: terraform init -reconfigure
+#
+#      - name: Terraform Plan
+#        run: terraform plan
+#
+#      - name: Terraform Apply
+#        if: github.ref == 'refs/heads/main'
+#        run: terraform apply -auto-approve
+
