@@ -25,9 +25,9 @@ jobs:
       - name: build docker image and push
         working-directory: Java-Application/AirBnbClone-main
         run: |
-            docker build . -t booking-app:latest --build-arg DB_USERNAME=$${{vars.DB_USERNAME}} --build-arg DB_PASSWORD=$${{vars.DB_PASSWORD}}
-            docker tag booking-app:latest ${{vars.repository}}/booking-app:latest
-            docker push ${{vars.repository}}/booking-app:latest
+            docker build . -t booking-app:latest 
+            docker tag booking-app:latest ${{vars.REPOSITORY}}/booking-app:latest
+            docker push ${{vars.REPOSITORY}}/booking-app:latest
         shell: bash
 
 
