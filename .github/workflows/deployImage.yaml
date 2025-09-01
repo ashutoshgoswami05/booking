@@ -2,11 +2,11 @@ name: Image build and push
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - ./Java-Application/*
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - ./Java-Application/*
 
 permissions:
   id-token: write
