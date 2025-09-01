@@ -2,9 +2,9 @@ name: Image build and deploy
 
 on:
   workflow_dispatch:
-##  push:
-##    branches:
-##      - main
+#  push:
+#    branches:
+#      - main
 #    paths:
 #      - ./Java-Application/*
 
