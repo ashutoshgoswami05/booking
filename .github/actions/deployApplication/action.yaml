@@ -1,0 +1,46 @@
+name: deploy application
+
+description: This deploys the java application on k8s cluster
+
+inputs:
+  eks-cluster-name:
+    description: name of eks cluster
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::471208935946:role/Githubactions
+        aws-region: eu-central-1
+
+    - name: setup k8s context
+      if: success()
+      run: |
+        aws eks --region eu-central-1 update-kubeconfig --name ${{inputs.eks-cluster-name}}
+      shell: bash
+
+
+    - name: kubernetes create secret
+      if: success()
+      run: |
+        kubectl create secret generic booking-app-secret \
+           --from-literal=DB_PASSWORD="${{ secrets.DB_PASSWORD }}"  \
+           --from-literal=DB_USERNAME="${{ secrets.DB_USERNAME }}" \
+           --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+           --from-literal=STRIPE_SECRET_KEY="${{ secrets.STRIPE_SECRET_KEY }}" \
+           --from-literal=DB_PASSWORD="${{ secrets.STRIPE_WEBHOOK_SECRET }}"
+      shell: bash
+
+
+    - name: helm install
+      run: |
+        helm upgrade -i booking-app .
+      shell: bash
+
+
+

@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: 471208935946.dkr.ecr.eu-central-1.amazonaws.com/booking-app
+  tag: latest
+  pullPolicy: Always
+
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: booking-app-service
+              port:
+                number: 80
+
+postgresql:
+  auth:
+    username: booking_user
+    password: securepassword
+    database: booking_db
+  primary:
+    persistence:
+      enabled: true
+      storageClass: gp2-csi
+      size: 8Gi
