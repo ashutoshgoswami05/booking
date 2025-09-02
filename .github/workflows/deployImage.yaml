@@ -44,7 +44,7 @@ jobs:
 #    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: deploy application
-        uses: .//github/actions/deployApplication
+        uses: ./.github/actions/deployApplication
         with:
           eks-cluster-name: vars.EKS-CLUSTER-NAME
 
