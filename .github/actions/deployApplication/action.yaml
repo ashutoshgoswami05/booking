@@ -37,6 +37,7 @@ runs:
       shell: bash
 
     - name: helm install
+      if: success()
       run: |
         helm upgrade -i booking-app .
       shell: bash
