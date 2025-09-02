@@ -44,6 +44,7 @@ runs:
     - name: kubernetes create secret
       if: success()
       run: |
+        kubectl delete secret booking-app-secret --ignore-not-found
         kubectl create secret generic booking-app-secret \
            --from-literal=DB_PASSWORD="${{ inputs.DB_PASSWORD }}"  \
            --from-literal=DB_USERNAME="${{ inputs.DB_USERNAME }}" \
@@ -62,6 +63,10 @@ runs:
     - name: install aws load balancer controller
       if: success()
       run: |
+        if helm status aws-load-balancer-controller -n kube-system >/dev/null 2>&1; then
+            echo "Deleting existing AWS Load Balancer Controller..."
+            helm uninstall aws-load-balancer-controller -n kube-system
+        fi
         helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
         -n kube-system \
         --set clusterName=${{inputs.eks-cluster-name}}\
