@@ -56,7 +56,11 @@ jobs:
       - name: deploy application
         uses: ./.github/actions/deployApplication
         with:
-          eks-cluster-name: vars.EKS_CLUSTER_NAME
-
+          eks-cluster-name: ${{vars.EKS_CLUSTER_NAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          DB_USERNAME: ${{secrets.DB_USERNAME}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          STRIPE_SECRET_KEY: ${{secrets.STRIPE_SECRET_KEY}}
+          STRIPE_WEBHOOK_SECRET: ${{secrets.STRIPE_WEBHOOK_SECRET}}
 
 

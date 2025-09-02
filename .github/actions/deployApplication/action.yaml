@@ -6,6 +6,21 @@ inputs:
   eks-cluster-name:
     description: name of eks cluster
     required: true
+  DB_PASSWORD:
+    description: database password
+    required: true
+  DB_USERNAME:
+    description: database username
+    required: true
+  JWT_SECRET:
+    description: jwt secret
+    required: true
+  STRIPE_SECRET_KEY:
+    description: stripe key
+    required: true
+  STRIPE_WEBHOOK_SECRET:
+    description: webhook secret
+    required: true
 
 runs:
   using: composite
@@ -30,11 +45,11 @@ runs:
       if: success()
       run: |
         kubectl create secret generic booking-app-secret \
-           --from-literal=DB_PASSWORD="${{ secrets.DB_PASSWORD }}"  \
-           --from-literal=DB_USERNAME="${{ secrets.DB_USERNAME }}" \
-           --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-           --from-literal=STRIPE_SECRET_KEY="${{ secrets.STRIPE_SECRET_KEY }}" \
-           --from-literal=DB_PASSWORD="${{ secrets.STRIPE_WEBHOOK_SECRET }}"
+           --from-literal=DB_PASSWORD="${{ inputs.DB_PASSWORD }}"  \
+           --from-literal=DB_USERNAME="${{ inputs.DB_USERNAME }}" \
+           --from-literal=JWT_SECRET="${{ inputs.JWT_SECRET }}" \
+           --from-literal=STRIPE_SECRET_KEY="${{ inputs.STRIPE_SECRET_KEY }}" \
+           --from-literal=DB_PASSWORD="${{ inputs.STRIPE_WEBHOOK_SECRET }}"
       shell: bash
 
     - name: helm install
