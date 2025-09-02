@@ -49,7 +49,7 @@ runs:
            --from-literal=DB_USERNAME="${{ inputs.DB_USERNAME }}" \
            --from-literal=JWT_SECRET="${{ inputs.JWT_SECRET }}" \
            --from-literal=STRIPE_SECRET_KEY="${{ inputs.STRIPE_SECRET_KEY }}" \
-           --from-literal=DB_PASSWORD="${{ inputs.STRIPE_WEBHOOK_SECRET }}"
+           --from-literal=STRIPE_WEBHOOK_SECRET="${{ inputs.STRIPE_WEBHOOK_SECRET }}"
       shell: bash
 
     - name: helm install
