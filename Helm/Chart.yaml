@@ -1,0 +1,10 @@
+apiVersion: v2
+name: booking-app
+description: A Helm chart for deploying the booking-app
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+  - name: postgresql
+    version: "15.5.25"  # Use a valid version from Bitnami
+    repository: "https://charts.bitnami.com/bitnami"
