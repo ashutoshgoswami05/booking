@@ -36,6 +36,11 @@ runs:
            --from-literal=DB_PASSWORD="${{ secrets.STRIPE_WEBHOOK_SECRET }}"
       shell: bash
 
+    - name: helm install
+      run: |
+        helm upgrade -i booking-app .
+      shell: bash
+
     - name: install aws load balancer controller
       if: success()
       run: |
@@ -44,11 +49,6 @@ runs:
         --set clusterName=booking-app-eks-cluster \
         --set serviceAccount.create=false \
         --set serviceAccount.name=aws-load-balancer-controller
-      shell: bash
-
-    - name: helm install
-      run: |
-        helm upgrade -i booking-app .
       shell: bash
 
 
