@@ -44,10 +44,19 @@ jobs:
     needs: build-docker-image
     #    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::471208935946:role/Githubactions
+          aws-region: eu-central-1
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: deploy application
         uses: ./.github/actions/deployApplication
         with:
-          eks-cluster-name: vars.EKS-CLUSTER-NAME
+          eks-cluster-name: vars.EKS_CLUSTER_NAME
 
 
 

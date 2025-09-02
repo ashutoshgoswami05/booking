@@ -5,6 +5,7 @@ description: This deploys the java application on k8s cluster
 inputs:
   eks-cluster-name:
     description: name of eks cluster
+    required: true
 
 runs:
   using: composite
