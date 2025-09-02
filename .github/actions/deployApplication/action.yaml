@@ -54,6 +54,7 @@ runs:
 
     - name: helm install
       if: success()
+      working-directory: Helm
       run: |
         helm upgrade -i booking-app .
       shell: bash
