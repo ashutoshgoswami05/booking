@@ -2,8 +2,7 @@
 ---
 
 ## 🔑 Authentication Flow
-- **Signup/Login** → Issues an access token (JWT)
-- **Refresh** → Exchanges refresh token (stored in cookie) for new access token
+- **Signup/Login** → Issues an access token
 - **Admin routes** → Require `Authorization: Bearer <token>` header
 
 ---
@@ -15,7 +14,6 @@
 |--------|---------------|--------------------------------------|----------|
 | POST   | `/auth/signup` | Register a new user                  | ❌ No    |
 | POST   | `/auth/login`  | Login user & return JWT access token | ❌ No    |
-| POST   | `/auth/refresh`| Refresh access token (via cookie)    | ❌ No    |
 
 ---
 
