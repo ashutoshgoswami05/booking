@@ -385,6 +385,38 @@ resource "aws_iam_role_policy_attachment" "alb_controller_attach" {
   policy_arn = aws_iam_policy.alb_controller_policy.arn
 }
 
+
+resource "kubernetes_config_map" "aws_auth" {
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  data = {
+    mapUsers = yamlencode([
+      {
+        userarn  = "arn:aws:iam::471208935946:root"
+        username = "root"
+        groups   = ["system:masters"]
+      }
+    ])
+    mapRoles = yamlencode([
+      {
+        rolearn  = aws_iam_role.eks_node_role.arn
+        username = "system:node:{{EC2PrivateDNSName}}"
+        groups   = [
+          "system:bootstrappers",
+          "system:nodes"
+        ]
+      }
+    ])
+  }
+
+  depends_on = [
+    aws_eks_cluster.minimal_eks,
+    aws_eks_node_group.minimal_node_group
+  ]
+}
 # Output the role ARN
 output "alb_controller_role_arn" {
   value = aws_iam_role.alb_controller_role.arn
