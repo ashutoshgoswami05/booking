@@ -1,7 +1,3 @@
-# 🏨 Hotel Booking API
-
-This API provides endpoints for **user authentication**, **hotel search**, and **admin hotel management**.  
-Authentication is handled via **JWT access tokens** (with refresh token support).
 
 ---
 
@@ -53,8 +49,39 @@ Authentication is handled via **JWT access tokens** (with refresh token support)
 
 ---
 
-## 🛡️ Security Notes
-- **Public endpoints** require no authentication.
-- **Admin endpoints** require a valid JWT token in the `Authorization` header:
+## ⚙️ Infrastructure & Deployment (CI/CD)
 
+This project uses **Terraform + GitHub Actions** to provision infrastructure and deploy the app to **AWS EKS**.
 
+### 1️⃣ Spin up the Terraform state bucket
+Run the workflow:
+👉 [tf_state_infra.yaml](https://github.com/ashutoshgoswami05/booking/actions/workflows/tf_state_infra.yaml)  
+This creates the **S3 bucket** + **DynamoDB table** for Terraform remote state.
+
+### 2️⃣ Provision AWS Infrastructure
+Run the workflow:
+👉 [infra.yaml](https://github.com/ashutoshgoswami05/booking/actions/workflows/infra.yaml)  
+This sets up the **VPC, EKS cluster, IAM roles, and networking**.
+
+### 3️⃣ Build & Deploy Application
+Run the workflow:
+👉 [deployImage.yaml](https://github.com/ashutoshgoswami05/booking/actions/workflows/deployImage.yaml)  
+This:
+- Builds the Docker image
+- Pushes it to **Amazon ECR**
+- Deploys the app to **Amazon EKS** using Helm
+
+---
+
+## ✅ Best Practices
+- Never commit sensitive values into `values.yaml`
+- Use `values.secret.yaml` locally and add it to `.gitignore`
+- Store sensitive config in **GitHub Actions Secrets** or **External Secrets Operator**
+
+---
+
+## 📖 Resources
+- [GitHub Actions Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
+- [Helm Secrets Plugin](https://github.com/jkroepke/helm-secrets)
+- [External Secrets Operator](https://external-secrets.io/)
+- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)  
