@@ -40,24 +40,31 @@ runs:
         aws eks --region eu-central-1 update-kubeconfig --name ${{inputs.eks-cluster-name}}
       shell: bash
 
-
-    - name: kubernetes create secret
+    - name: check access
       if: success()
       run: |
-        kubectl delete secret booking-app-secret --ignore-not-found
-        kubectl create secret generic booking-app-secret \
-           --from-literal=DB_PASSWORD="${{ inputs.DB_PASSWORD }}"  \
-           --from-literal=DB_USERNAME="${{ inputs.DB_USERNAME }}" \
-           --from-literal=JWT_SECRET="${{ inputs.JWT_SECRET }}" \
-           --from-literal=STRIPE_SECRET_KEY="${{ inputs.STRIPE_SECRET_KEY }}" \
-           --from-literal=STRIPE_WEBHOOK_SECRET="${{ inputs.STRIPE_WEBHOOK_SECRET }}"
+        kubectl get pods -A
       shell: bash
 
-    - name: helm install
-      if: success()
-      working-directory: Helm
-      run: |
-        helm upgrade -i booking-app .
-      shell: bash
+
+
+#    - name: kubernetes create secret
+#      if: success()
+#      run: |
+#        kubectl delete secret booking-app-secret --ignore-not-found
+#        kubectl create secret generic booking-app-secret \
+#           --from-literal=DB_PASSWORD="${{ inputs.DB_PASSWORD }}"  \
+#           --from-literal=DB_USERNAME="${{ inputs.DB_USERNAME }}" \
+#           --from-literal=JWT_SECRET="${{ inputs.JWT_SECRET }}" \
+#           --from-literal=STRIPE_SECRET_KEY="${{ inputs.STRIPE_SECRET_KEY }}" \
+#           --from-literal=STRIPE_WEBHOOK_SECRET="${{ inputs.STRIPE_WEBHOOK_SECRET }}"
+#      shell: bash
+#
+#    - name: helm install
+#      if: success()
+#      working-directory: Helm
+#      run: |
+#        helm upgrade -i booking-app .
+#      shell: bash
 
 
